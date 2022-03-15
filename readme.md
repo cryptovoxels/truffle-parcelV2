@@ -11,7 +11,7 @@ This repository contains the new contracts
 - - ... truffle migrations
 - docs
 - - parcels.sol.md // markdown documentation about the `parcels.sol` contract
-
+- old_parcels.sol // The old parcel contract (useful for reference) (to be ignored by auditors)
 ## Install
 
 1. Clone repo

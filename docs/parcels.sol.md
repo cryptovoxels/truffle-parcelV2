@@ -1,10 +1,22 @@
 # Documentation concerning Parcels.sol
 
 ## Table of Content:
-1. Basic methods and attributes
-2. The contract methods
+1. Contract behaviors
+2. Basic methods and attributes
+3. The contract methods
 
-## Basic methods and attributes
+
+## 1 Contract behaviors
+
+The contract replicates the behaviors of [the previous Cryptovoxels contract](https://etherscan.io/token/0x79986af15539de2db9a5086382daeda917a9cf0c).
+
+- Only the contract owner should be able to mint or burn a parcel.
+- Users should be able to be given a parcel and transfer it just like any ERC721 NFT.
+- Users should be able to approve other addresses to use their NFT just like any ERC721 NFT (setApprovalForAll(), approve())
+- Parcels should have both an owner and a consumer (e.g. Owner and Renter)
+- Anyone should be able to query the contract for parcel boundingBoxes or to obtain the list of parcels a wallet owns.
+
+## 2 Basic methods and attributes
 The contract is a simple ERC721 contract;
 
 See [Open Zeppelin ERC721 Docs](https://docs.openzeppelin.com/contracts/2.x/api/token/erc721) for more information about ERC721.
@@ -17,7 +29,7 @@ The contract implements ERC721Consumable;
 
 See [EIP-4400 on Ethereum](https://eips.ethereum.org/EIPS/eip-4400) for more information about ERC721Consumable.
 
-## The contract methods
+## 3 The contract methods
 
 ### takeOwnership
 ```js
