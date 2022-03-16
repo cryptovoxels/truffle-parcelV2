@@ -83,7 +83,7 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
         int16 y2,
         int16 z2
     ) external onlyOwner {
-        require(_to != address(0), "Can't mind to address Zero");
+        require(_to != address(0), "Can't mint to address Zero");
         require(x2 > x1, "Width is unsupported");
         require(y2 > y1, "height is unsupported");
         require(z2 > z1, "Depth is unsupported");
