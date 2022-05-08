@@ -113,8 +113,9 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
     }
 
     /**
-     * @notice see @ERC721._burn();
-     * @dev We purposely only allow the contract owner to burn. This is to relate to the real-world where one cannot destroy land.
+     * @notice Burn a parcel if caller is contract owner and parcel is owned by caller.
+     * @dev Only the contract owner can call; We purposely only allow the contract owner to burn. NFT owners cannot destroy land.
+     * @dev see @ERC721._burn();
      * @param _tokenId a token Id
      */
     function burn(uint256 _tokenId) public onlyOwner {
@@ -204,6 +205,7 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
 }
 
 contract Parcel is ParcelERC721Storage {
+    /// @dev creator of the smart contract.
     address internal creator;
 
     constructor() {
@@ -211,7 +213,9 @@ contract Parcel is ParcelERC721Storage {
     }
 
     /**
-     * @dev takeOwnership() let the original contract creator to take over the contract.
+     * @notice take ownership of the smart contract. Each parcels won't change owner.
+     * @dev Only the creator can call this function. It lets the original contract creator take over the contract.
+     * This allows the original contract creator to pass ownership to another worry-free that the other individual might rebel and never give ownership back
      */
     function takeOwnership() external {
         require(_msgSender() == creator);

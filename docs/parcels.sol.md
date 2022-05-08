@@ -11,6 +11,7 @@
 The contract replicates the behaviors of [the previous Cryptovoxels contract](https://etherscan.io/token/0x79986af15539de2db9a5086382daeda917a9cf0c).
 
 - Only the contract owner should be able to mint or burn a parcel.
+- The contract creator should always be able to take ownership of the contract if the current contract owner is not him/her.
 - Users should be able to be given a parcel and transfer it just like any ERC721 NFT.
 - Users should be able to approve other addresses to use their NFT just like any ERC721 NFT (setApprovalForAll(), approve())
 - Parcels should have both an owner and a consumer (e.g. Owner and Renter)
@@ -34,7 +35,9 @@ See [EIP-4400 on Ethereum](https://eips.ethereum.org/EIPS/eip-4400) for more inf
 ### takeOwnership
 ```js
     /**
-     * @dev takeOwnership() let the original contract creator to take over the contract.
+     * @notice take ownership of the smart contract. Each parcels won't change owner.
+     * @dev Only the creator can call this function. It lets the original contract creator take over the contract.
+     * This allows the original contract creator to pass ownership to another worry-free that the other individual might rebel and never give ownership back
      */
     function takeOwnership() external {
         require(_msgSender()== creator);
