@@ -13,6 +13,7 @@ The contract replicates the behaviors of [the previous Cryptovoxels contract](ht
 Permissions:
 - Only the contract owner (set by Ownable.sol) should be able to mint or burn an NFT (a parcel).
 - Contract owner (set by ownable.sol) can transfer ownership to anyone.
+- If contract creator has transferred ownership to a new owner, the contract creator shouldn't be able to mint / burn NFTs.
 - The contract creator should always be able to take ownership of the contract if the current contract owner is not him/her.
 - The contract owner should not be able to burn NFTs he/she does not own.
 Functionalities:
