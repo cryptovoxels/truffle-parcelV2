@@ -39,7 +39,7 @@ interface IERC721Consumable {
 
 contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
     /// @dev Mapping from token ID to consumer address
-    mapping(uint256 => address) _tokenConsumers;
+    mapping(uint256 => address) internal _tokenConsumers;
 
     /// @dev Parcel id to bounding boxes
     mapping(uint256 => BoundingBox) internal boundingBoxes;
