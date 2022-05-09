@@ -10,8 +10,12 @@
 
 The contract replicates the behaviors of [the previous Cryptovoxels contract](https://etherscan.io/token/0x79986af15539de2db9a5086382daeda917a9cf0c).
 
-- Only the contract owner should be able to mint or burn a parcel.
+Permissions:
+- Only the contract owner (set by Ownable.sol) should be able to mint or burn an NFT (a parcel).
+- Contract owner (set by ownable.sol) can transfer ownership to anyone.
 - The contract creator should always be able to take ownership of the contract if the current contract owner is not him/her.
+- The contract owner should not be able to burn NFTs he/she does not own.
+Functionalities:
 - Users should be able to be given a parcel and transfer it just like any ERC721 NFT.
 - Users should be able to approve other addresses to use their NFT just like any ERC721 NFT (setApprovalForAll(), approve())
 - Parcels should have both an owner and a consumer (e.g. Owner and Renter)
