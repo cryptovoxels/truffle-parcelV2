@@ -38,6 +38,7 @@ interface IERC721Consumable {
 }
 
 contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
+    address immutable creator;
     /// @dev Mapping from token ID to consumer address
     mapping(uint256 => address) internal _tokenConsumers;
 
@@ -59,6 +60,7 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
 
     constructor() ERC721("Voxels parcel", "CVPA") {
         _baseUri = "https://www.cryptovoxels.com/p/";
+        creator = msg.sender;
     }
 
     /**
@@ -204,10 +206,8 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
 }
 
 contract Parcel is ParcelERC721Storage {
-    address immutable creator;
 
     constructor() {
-        creator = msg.sender;
     }
 
     /**
