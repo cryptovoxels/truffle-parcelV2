@@ -204,7 +204,7 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
 }
 
 contract Parcel is ParcelERC721Storage {
-    address internal creator;
+    address immutable creator;
 
     constructor() {
         creator = msg.sender;
