@@ -54,7 +54,7 @@ See [EIP-4400 on Ethereum](https://eips.ethereum.org/EIPS/eip-4400) for more inf
 ```
 Note: This function is present in the old parcel contract and brought back.
 At construction, the `address creator` variable is set as the original contract creator. Since the contract is `Ownable`, the owner of the contract can give ownership to someone else.
-However, if the new owner is unwilling to cooperate, the original contract creator loses control over the contract.
+However, if the new owner is unwilling to cooperate with the creator, the original contract creator loses control over the contract.
 This function is to guarantee the original contract creator can take back ownership of the contract with `takeOwnership()`.
 
 This function does not affect NFT ownerships.
