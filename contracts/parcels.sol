@@ -199,7 +199,7 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
         address _to,
         uint256 _tokenId
     ) internal override(ERC721Enumerable) {
-        ERC721Enumerable._beforeTokenTransfer(_from, _to, _tokenId);
+        super._beforeTokenTransfer(_from, _to, _tokenId);
 
         _changeConsumer(_from, address(0), _tokenId);
     }
