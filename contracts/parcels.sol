@@ -255,22 +255,42 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
     }
 
     /**
-     * @notice Returns the parcels owned by _owner
+     * @dev 
+     * @notice Function that returns the parcels owned by _owner (pages of 150 elements)
      * @param tokenOwner Address of the owner
-     * @return _ids list of token ids
+     * @param page page index, 0 is the first 150 elements of the balance.
+     * @return _ids list of token ids and _nextpage is the index of the next page, _nextpage is 0 if there is no more pages.
      */
-    function parcelsOf(address tokenOwner)
+    function parcelsOf(address tokenOwner,uint256 page)
         external
         view
-        returns (uint256[] memory _ids)
+        returns (uint256[] memory _ids,uint256 _nextpage)
     {
         require(tokenOwner != address(0), "Address Zero not supported");
+        require(page >= 0, "Page index has to be zero or more.");
+        uint256 max = 150;
         uint256 balance;
         balance = balanceOf(tokenOwner);
-        uint256[] memory ids = new uint256[](balance);
-        for (uint256 i = 0; i < balance; i++) {
-            ids[i] = tokenOfOwnerByIndex(tokenOwner, i);
+        uint256 offset = page*max;
+        uint256 resultSize = balance;
+        if(balance>= max+offset){
+            // balance is above or equal to 150* page index + 150
+            resultSize = max;
+        }else if (balance< max+offset){
+            // balance is less than 150* page index + 150
+            resultSize = balance - offset;
         }
-        return ids;
+        uint256[] memory ids = new uint256[](resultSize);
+        uint256 index = 0;
+        for (uint256 i = offset; i < resultSize+offset; i++) {
+            ids[index] = tokenOfOwnerByIndex(tokenOwner, i);
+            index++;
+        }
+        if(balance<=(ids.length+offset)){
+            return (ids,0);
+        }else{
+            return (ids,page+1);
+        }
+        
     }
 }
