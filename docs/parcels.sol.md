@@ -10,7 +10,16 @@
 
 The contract replicates the behaviors of [the previous Cryptovoxels contract](https://etherscan.io/token/0x79986af15539de2db9a5086382daeda917a9cf0c).
 
-- Only the contract owner should be able to mint or burn a parcel.
+Permissions:
+- Only the contract owner (set by Ownable.sol) should be able to mint or burn an NFT (a parcel).
+- Contract owner (set by ownable.sol) can transfer ownership to anyone.
+- If contract creator has transferred ownership to a new owner, the contract creator shouldn't be able to mint / burn NFTs.
+- The contract creator should always be able to take ownership of the contract if the current contract owner is not him/her.
+- The contract owner should not be able to burn NFTs he/she does not own.
+
+⚠️ This means the contract **owner can lose ownership of the contract** at any time with no accountability.
+
+Functionalities:
 - Users should be able to be given a parcel and transfer it just like any ERC721 NFT.
 - Users should be able to approve other addresses to use their NFT just like any ERC721 NFT (setApprovalForAll(), approve())
 - Parcels should have both an owner and a consumer (e.g. Owner and Renter)
@@ -34,7 +43,9 @@ See [EIP-4400 on Ethereum](https://eips.ethereum.org/EIPS/eip-4400) for more inf
 ### takeOwnership
 ```js
     /**
-     * @dev takeOwnership() let the original contract creator to take over the contract.
+     * @notice take ownership of the smart contract. Each parcels won't change owner.
+     * @dev Only the creator can call this function. It lets the original contract creator take over the contract.
+     * This allows the original contract creator to pass ownership to another worry-free that the other individual might rebel and never give ownership back
      */
     function takeOwnership() external {
         require(_msgSender()== creator);
@@ -43,7 +54,10 @@ See [EIP-4400 on Ethereum](https://eips.ethereum.org/EIPS/eip-4400) for more inf
 ```
 Note: This function is present in the old parcel contract and brought back.
 At construction, the `address creator` variable is set as the original contract creator. Since the contract is `Ownable`, the owner of the contract can give ownership to someone else.
-However, if new owner is unwilling to cooperate, the original contract creator can take back ownership of the contract with `takeOwnership()`.
+However, if the new owner is unwilling to cooperate with the creator, the original contract creator loses control over the contract.
+This function is to guarantee the original contract creator can take back ownership of the contract with `takeOwnership()`.
+
+This function does not affect NFT ownerships.
 
 ### transferOwnership override
 ```js

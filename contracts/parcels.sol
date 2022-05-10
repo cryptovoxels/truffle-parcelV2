@@ -38,6 +38,7 @@ interface IERC721Consumable {
 }
 
 contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
+    ///@dev ultimate creator of the contract
     address immutable creator;
     /// @dev Mapping from token ID to consumer address
     mapping(uint256 => address) internal _tokenConsumers;
@@ -115,8 +116,9 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
     }
 
     /**
-     * @notice see @ERC721._burn();
-     * @dev We purposely only allow the contract owner to burn. This is to relate to the real-world where one cannot destroy land.
+     * @notice Burn a parcel if caller is contract owner and parcel is owned by caller.
+     * @dev Only the contract owner can call; We purposely only allow the contract owner to burn. NFT owners cannot destroy land.
+     * @dev see @ERC721._burn();
      * @param _tokenId a token Id
      */
     function burn(uint256 _tokenId) public onlyOwner {
@@ -205,7 +207,10 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
     }
     
     /**
-     * @dev takeOwnership() let the original contract creator to take over the contract.
+     * @notice Take ownership of the smart contract. Each parcels won't change owner.
+     * @dev Only the creator can call this function. It lets the original contract creator take over the contract.
+     * This allows the original contract creator to pass ownership to another worry-free that the other individual might rebel and never give ownership back
+     * This means the current owner can lose ownership at anytime without accountability.
      */
     function takeOwnership() external {
         require(_msgSender() == creator);
