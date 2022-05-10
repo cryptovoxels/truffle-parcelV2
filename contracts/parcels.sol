@@ -37,7 +37,7 @@ interface IERC721Consumable {
     function changeConsumer(address _consumer, uint256 _tokenId) external;
 }
 
-contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
+contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
     address immutable creator;
     /// @dev Mapping from token ID to consumer address
     mapping(uint256 => address) internal _tokenConsumers;
@@ -203,13 +203,7 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
 
         _changeConsumer(_from, address(0), _tokenId);
     }
-}
-
-contract Parcel is ParcelERC721Storage {
-
-    constructor() {
-    }
-
+    
     /**
      * @dev takeOwnership() let the original contract creator to take over the contract.
      */
