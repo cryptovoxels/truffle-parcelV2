@@ -41,7 +41,10 @@ contract("Parcel - Unit test",async function (accounts) {
   });
 
   it('call ParcelsOf()', async () => {
-    expect((await token.parcelsOf(wallet)).length).to.be.equal(0)
+    let result = await token.parcelsOf(wallet,0)
+
+    expect(result[0].length).to.be.equal(0)
+    expect(result[1].toNumber()).to.be.equal(0)
   });
 
   it('call balanceOf()', async () => {
@@ -105,8 +108,10 @@ contract("Parcel - Unit test",async function (accounts) {
   it('Mint a parcel + Check parcelsOf', async () => {
     const args = [wallet,2,3,3,3,4,4,4] as const
     await token.mint(...args)
-    let q = await token.parcelsOf(wallet)
-    expect(q.length).to.be.equal(2)
+    let q = await token.parcelsOf(wallet,0)
+    expect(q[0].length).to.be.equal(2)
+    // make sure page is 0
+    expect(q[1].toNumber()).to.be.equal(0)
   });
 
   // We burn a parcel, expect balanceOf to return 1
@@ -163,5 +168,58 @@ contract("Parcel - Unit test",async function (accounts) {
     expect(q).to.be.equal(constants.ZERO_ADDRESS)
   });
 
+  // This test can take about 11 seconds
+  it('Mass mint 150 parcels', async () => {
 
+    for(let i = 2; i<=152;i++){
+      await token.mint(walletTo,i,3,3,3,4,4,4)
+    }
+
+    expect((await token.balanceOf(walletTo)).toNumber()).to.be.equal(152)
+  });
+  
+  it('parcelsOf - Check pagination', async () => {
+    // We know for a fact that user walletTo has 152 NFTs
+    let tuple = await token.parcelsOf(walletTo,0)
+    let tuple2 = await token.parcelsOf(walletTo,1)
+    // Max num of items / page is 150
+    expect(tuple[0].length).to.be.equal(150)
+    // Check we have been given a new page index
+    expect(tuple[1].toNumber()).to.be.equal(1)
+
+    // in page index 1 there should be only 2 NFTs left
+    expect(tuple2[0].length).to.be.equal(2)
+    // We reached the max, the next page should be non-existant
+    expect(tuple2[1].toNumber()).to.be.equal(0)
+  });
+
+  // Can take 30 seconds
+  it('Mass mint another 148 parcels', async () => {
+
+    for(let i = 153; i<=300;i++){
+      // Mass minting like this will 99% never happen in real life. However it has the ability to "crash" the local environment.
+      // We therefore wait 100ms between each mints to slow things down.
+      await (()=>new Promise((resolve,reject)=>setTimeout(()=>{resolve(true)},100)))()
+      await token.mint(walletTo,i,3,3,3,4,4,4)
+    }
+
+    expect((await token.balanceOf(walletTo)).toNumber()).to.be.equal(300)
+  });
+
+  it('parcelsOf - Check pagination for 300 parcels', async () => {
+    // We know for a fact that user walletTo has 300 NFTs
+    let tuple = await token.parcelsOf(walletTo,0)
+    let tuple2 = await token.parcelsOf(walletTo,1)
+
+    // Max num of items / page is 150
+    expect(tuple[0].length).to.be.equal(150)
+    // Check we have been given a new page index
+    expect(tuple[1].toNumber()).to.be.equal(1)
+
+    // in page index 1 there should be only 150 NFTs
+    expect(tuple2[0].length).to.be.equal(150)
+    // We reached the max, the next page should be non-existant
+    expect(tuple2[1].toNumber()).to.be.equal(0)
+
+  });
 });
