@@ -16,6 +16,9 @@ Permissions:
 - If contract creator has transferred ownership to a new owner, the contract creator shouldn't be able to mint / burn NFTs.
 - The contract creator should always be able to take ownership of the contract if the current contract owner is not him/her.
 - The contract owner should not be able to burn NFTs he/she does not own.
+
+⚠️ This means the contract **owner can lose ownership of the contract** at any time with no accountability.
+
 Functionalities:
 - Users should be able to be given a parcel and transfer it just like any ERC721 NFT.
 - Users should be able to approve other addresses to use their NFT just like any ERC721 NFT (setApprovalForAll(), approve())

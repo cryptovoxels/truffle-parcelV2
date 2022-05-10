@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -37,9 +37,11 @@ interface IERC721Consumable {
     function changeConsumer(address _consumer, uint256 _tokenId) external;
 }
 
-contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
+contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
+    ///@dev ultimate creator of the contract
+    address immutable creator;
     /// @dev Mapping from token ID to consumer address
-    mapping(uint256 => address) _tokenConsumers;
+    mapping(uint256 => address) internal _tokenConsumers;
 
     /// @dev Parcel id to bounding boxes
     mapping(uint256 => BoundingBox) internal boundingBoxes;
@@ -59,6 +61,7 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
 
     constructor() ERC721("Voxels parcel", "CVPA") {
         _baseUri = "https://www.cryptovoxels.com/p/";
+        creator = msg.sender;
     }
 
     /**
@@ -198,24 +201,16 @@ contract ParcelERC721Storage is IERC721Consumable, ERC721Enumerable, Ownable {
         address _to,
         uint256 _tokenId
     ) internal override(ERC721Enumerable) {
-        ERC721Enumerable._beforeTokenTransfer(_from, _to, _tokenId);
+        super._beforeTokenTransfer(_from, _to, _tokenId);
 
         _changeConsumer(_from, address(0), _tokenId);
     }
-}
-
-contract Parcel is ParcelERC721Storage {
-    /// @dev creator of the smart contract.
-    address internal creator;
-
-    constructor() {
-        creator = msg.sender;
-    }
-
+    
     /**
-     * @notice take ownership of the smart contract. Each parcels won't change owner.
+     * @notice Take ownership of the smart contract. Each parcels won't change owner.
      * @dev Only the creator can call this function. It lets the original contract creator take over the contract.
      * This allows the original contract creator to pass ownership to another worry-free that the other individual might rebel and never give ownership back
+     * This means the current owner can lose ownership at anytime without accountability.
      */
     function takeOwnership() external {
         require(_msgSender() == creator);
@@ -232,9 +227,9 @@ contract Parcel is ParcelERC721Storage {
             newOwner != address(0),
             "Ownable: new owner is the zero address"
         );
-        if (_msgSender() == creator || _msgSender() == owner()) {
-            _transferOwnership(newOwner);
-        }
+        require(_msgSender() == creator || _msgSender() == owner(),'Ownable: invalid permission');
+
+         _transferOwnership(newOwner);
     }
 
     /**
