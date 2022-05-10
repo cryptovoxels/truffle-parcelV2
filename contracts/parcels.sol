@@ -66,7 +66,8 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
 
     /**
     * @notice Requires positive width,height and depth
-    * @dev Creates a new parcel as NFT.
+    * @dev Creates a new parcel as NFT. Only the owner of the contract can call.
+    * @dev NFTs are allowed to overlap each other by design.
     * @param _to address receiving the Parcel
     * @param _tokenId the id of the new Parcel.
     * @param x1 property x1 of the first point of the bounding box
