@@ -36,6 +36,10 @@ contract("Parcel - Unit test",async function (accounts) {
     }
   });
 
+  it('Non-owner calls transferOwnership - Should revert', async () => {
+    await expectRevert(token.transferOwnership(walletTo,{from:walletTo}),'Ownable: invalid permission')
+  });
+
   it('call ParcelsOf()', async () => {
     expect((await token.parcelsOf(wallet)).length).to.be.equal(0)
   });

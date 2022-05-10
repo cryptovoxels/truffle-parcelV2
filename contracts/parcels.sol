@@ -222,9 +222,9 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
             newOwner != address(0),
             "Ownable: new owner is the zero address"
         );
-        if (_msgSender() == creator || _msgSender() == owner()) {
-            _transferOwnership(newOwner);
-        }
+        require(_msgSender() == creator || _msgSender() == owner(),'Ownable: invalid permission');
+
+         _transferOwnership(newOwner);
     }
 
     /**
