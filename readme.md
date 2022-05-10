@@ -34,3 +34,6 @@ run `truffle develop` follow by `test`
 Edit your local network in truffle-config.js under 'development'.
 
 run `truffle test`
+
+Screenshot of test results:
+![image](https://user-images.githubusercontent.com/38708022/167714141-6dd5c28c-68e8-4d2c-8796-91fee8ce525b.png)

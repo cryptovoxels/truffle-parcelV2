@@ -26,7 +26,15 @@ contract("Parcel - Unit test",async function (accounts) {
     expect(await token.symbol()).to.equal('CVPA');
     expect(await token.name()).to.equal('Voxels parcel');
   });
-  
+
+  it('Contract support ERC721 interface', async () => {
+    expect(await token.supportsInterface('0x80ac58cd')).to.be.true
+  });
+
+  it('Contract does not support ERC1155 interface', async () => {
+    expect(await token.supportsInterface('0xd9b67a26')).to.be.false
+  });
+
   it('Owner calls transferOwnership', async () => {
     try{
       await token.transferOwnership(walletTo)
@@ -78,7 +86,7 @@ contract("Parcel - Unit test",async function (accounts) {
 })
 
 
- contract("Parcels - Integration tests",async function (accounts) {
+contract("Parcels - Integration tests",async function (accounts) {
 
   const [wallet,walletTo,walletThree] = accounts
   let token:ParcelInstance
