@@ -244,7 +244,7 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
         returns (uint256[] memory _ids,uint256 _nextpage)
     {
         require(tokenOwner != address(0), "Address Zero not supported");
-        require(page >= 0, "Page index has to be zero or more.");
+
         uint256 max = 150;
         uint256 balance;
         balance = balanceOf(tokenOwner);
