@@ -250,7 +250,7 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
         uint256 balance;
         balance = balanceOf(tokenOwner);
         uint256 offset = page*_maxItemsPerPage;
-        uint256 resultSize = balance;
+        uint256 resultSize;
         if(balance>= _maxItemsPerPage+offset){
             // balance is above or equal to 150* page index + 150
             resultSize = _maxItemsPerPage;
