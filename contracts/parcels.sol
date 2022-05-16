@@ -231,6 +231,9 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
         z2 = boundingBoxes[_tokenId].z2;
     }
 
+    ///@dev the max number of items to show per page;
+    ///@dev only used in parcelsOf()
+    uint256 private constant _maxItemsPerPage = 150;
     /**
      * @dev 
      * @notice Function that returns the parcels owned by _owner (pages of 150 elements)
@@ -244,16 +247,14 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
         returns (uint256[] memory _ids,uint256 _nextpage)
     {
         require(tokenOwner != address(0), "Address Zero not supported");
-
-        uint256 max = 150;
         uint256 balance;
         balance = balanceOf(tokenOwner);
-        uint256 offset = page*max;
+        uint256 offset = page*_maxItemsPerPage;
         uint256 resultSize = balance;
-        if(balance>= max+offset){
+        if(balance>= _maxItemsPerPage+offset){
             // balance is above or equal to 150* page index + 150
-            resultSize = max;
-        }else if (balance< max+offset){
+            resultSize = _maxItemsPerPage;
+        }else if (balance< _maxItemsPerPage+offset){
             // balance is less than 150* page index + 150
             resultSize = balance - offset;
         }

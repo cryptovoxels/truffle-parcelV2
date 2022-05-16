@@ -114,11 +114,15 @@ Lets a caller obtain the bounding box of a parcel given a token_id
 
 ### parcelOf
 ```js
+
+    ///@dev the max number of items to show per page;
+    ///@dev only used in parcelsOf()
+    uint256 private constant _maxItemsPerPage = 150;
     /**
      * @dev 
      * @notice Function that returns the parcels owned by _owner (pages of 150 elements)
      * @param tokenOwner Address of the owner
-     * @param page page index, 0 is the first 150 elements of the balance if balance >= 150.
+     * @param page page index, 0 is the first 150 elements of the balance.
      * @return _ids list of token ids and _nextpage is the index of the next page, _nextpage is 0 if there is no more pages.
      */
     function parcelsOf(address tokenOwner,uint256 page)
@@ -127,16 +131,14 @@ Lets a caller obtain the bounding box of a parcel given a token_id
         returns (uint256[] memory _ids,uint256 _nextpage)
     {
         require(tokenOwner != address(0), "Address Zero not supported");
-        require(page >= 0, "Page index has to be zero or more.");
-        uint256 max = 150;
         uint256 balance;
         balance = balanceOf(tokenOwner);
-        uint256 offset = page*max;
+        uint256 offset = page*_maxItemsPerPage;
         uint256 resultSize = balance;
-        if(balance>= max+offset){
+        if(balance>= _maxItemsPerPage+offset){
             // balance is above or equal to 150* page index + 150
-            resultSize = max;
-        }else if (balance< max+offset){
+            resultSize = _maxItemsPerPage;
+        }else if (balance< _maxItemsPerPage+offset){
             // balance is less than 150* page index + 150
             resultSize = balance - offset;
         }
@@ -151,7 +153,6 @@ Lets a caller obtain the bounding box of a parcel given a token_id
         }else{
             return (ids,page+1);
         }
-        
     }
 ```
 This is a new introduced function which lets the caller obtain a list of owned parcels given an address.
