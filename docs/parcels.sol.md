@@ -40,31 +40,14 @@ See [EIP-4400 on Ethereum](https://eips.ethereum.org/EIPS/eip-4400) for more inf
 
 ## 3 The contract methods
 
-### takeOwnership
-```js
-    /**
-     * @notice take ownership of the smart contract. Each parcels won't change owner.
-     * @dev Only the creator can call this function. It lets the original contract creator take over the contract.
-     * This allows the original contract creator to pass ownership to another worry-free that the other individual might rebel and never give ownership back
-     */
-    function takeOwnership() external {
-        require(_msgSender()== creator);
-        transferOwnership(creator);
-    }
-```
-Note: This function is present in the old parcel contract and brought back.
-At construction, the `address creator` variable is set as the original contract creator. Since the contract is `Ownable`, the owner of the contract can give ownership to someone else.
-However, if the new owner is unwilling to cooperate with the creator, the original contract creator loses control over the contract.
-This function is to guarantee the original contract creator can take back ownership of the contract with `takeOwnership()`.
-
-This function does not affect NFT ownerships.
-
 ### transferOwnership override
 ```js
     /**
      * Overrides transferOwnership of Ownable.
      * @dev Transfers ownership of the contract to a new account (`newOwner`).
      * Can only be called by the current owner or the contract creator.
+     * @dev This override allows the original contract creator to pass ownership to another wallet worry-free that the other individual might rebel and never give ownership back
+     * This means the current owner can lose ownership at anytime without accountability.
      */
     function transferOwnership(address newOwner) public override(Ownable) {
         require(
@@ -77,7 +60,12 @@ This function does not affect NFT ownerships.
     }
 ```
 Note: This function is present in the old parcel contract and brought back.
-This override is necessary to make `takeOwnership` above work.
+
+At construction, the `address creator` variable is set as the original contract creator. Since the contract is `Ownable`, the owner of the contract can give ownership to someone else.
+However, if the new owner is unwilling to cooperate with the creator, the original contract creator loses control over the contract.
+This override is to guarantee the original contract creator can take back ownership of the contract.
+
+This function does not affect NFT ownerships.
 
 ### getBoundingBox
 ```js
