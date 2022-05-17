@@ -177,22 +177,13 @@ contract Parcel is IERC721Consumable, ERC721Enumerable, Ownable {
 
         _changeConsumer(_from, address(0), _tokenId);
     }
-    
-    /**
-     * @notice Take ownership of the smart contract. Each parcels won't change owner.
-     * @dev Only the creator can call this function. It lets the original contract creator take over the contract.
-     * This allows the original contract creator to pass ownership to another worry-free that the other individual might rebel and never give ownership back
-     * This means the current owner can lose ownership at anytime without accountability.
-     */
-    function takeOwnership() external {
-        require(_msgSender() == creator);
-        transferOwnership(creator);
-    }
 
     /**
      * Overrides transferOwnership of Ownable.
      * @dev Transfers ownership of the contract to a new account (`newOwner`).
      * Can only be called by the current owner or the contract creator.
+     * @dev This override allows the original contract creator to pass ownership to another wallet worry-free that the other individual might rebel and never give ownership back
+     * This means the current owner can lose ownership at anytime without accountability.
      */
     function transferOwnership(address newOwner) public override(Ownable) {
         require(

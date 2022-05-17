@@ -100,7 +100,7 @@ contract("Parcels - Integration tests",async function (accounts) {
   });
 
   it('owner takes back Ownership', async () => {
-    await token.takeOwnership()
+    await token.transferOwnership(wallet)
     expect(await token.owner()).to.equal(wallet);
   });
 
