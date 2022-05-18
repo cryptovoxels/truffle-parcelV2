@@ -1,4 +1,4 @@
-
+//SPDX-License-Identifier: MIT
 /// @title ERC-721 Consumer Role extension
 ///  Note: the ERC-165 identifier for this interface is 0x953c8dfa
 /* is ERC721 */
